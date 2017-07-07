@@ -24,7 +24,7 @@ class TrackProcessingDurationBehavior : Behavior<ITransportReceiveContext>
         try
         {
             Messages.TryAdd(id, start);
-            await next();
+            await next().ConfigureAwait(false);
         }
         finally
         {

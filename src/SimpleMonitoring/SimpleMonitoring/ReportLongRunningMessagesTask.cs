@@ -46,7 +46,7 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
             try
             {
                 var start = DateTime.UtcNow;
-                await Invoke();
+                await Invoke().ConfigureAwait(false);
 
                 var now = DateTime.UtcNow;
                 var duration = now - start;
@@ -60,7 +60,7 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
                 var next = Next(start);
                 var delay = next - now;
                 Log.DebugFormat("Delaying {0}", delay);
-                await Task.Delay(delay, cancellationToken);
+                await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
