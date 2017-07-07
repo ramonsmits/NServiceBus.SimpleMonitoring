@@ -8,12 +8,12 @@ class TrackProcessingDurationBehavior : Behavior<ITransportReceiveContext>
 {
     readonly ILog Log = LogManager.GetLogger(nameof(TrackProcessingDurationBehavior));
     readonly ConcurrentDictionary<string, DateTime> Messages;
-    readonly TimeSpan Thresshold;
+    readonly TimeSpan Threshold;
 
-    public TrackProcessingDurationBehavior(ConcurrentDictionary<string, DateTime> messages, TimeSpan thresshold)
+    public TrackProcessingDurationBehavior(ConcurrentDictionary<string, DateTime> messages, TimeSpan threshold)
     {
         Messages = messages;
-        Thresshold = thresshold;
+        Threshold = threshold;
     }
 
     public override async Task Invoke(ITransportReceiveContext context, Func<Task> next)
@@ -31,7 +31,7 @@ class TrackProcessingDurationBehavior : Behavior<ITransportReceiveContext>
             Messages.TryRemove(id, out start);
             var duration = DateTime.UtcNow - start;
             Log.DebugFormat("Message {0} processing duration: {1}", id, duration);
-            if (duration > Thresshold) Log.WarnFormat("Processing duration {0} larger than allowed thresshold {1}.", duration, Thresshold);
+            if (duration > Threshold) Log.WarnFormat("Processing duration {0} larger than allowed threshold {1}.", duration, Threshold);
         }
     }
 }

@@ -13,17 +13,17 @@ public class SimpleMonitoringFeature : Feature
 
     protected override void Setup(FeatureConfigurationContext context)
     {
-        const double thressholdDefault = 15D;
-        var thressholdValue = Convert.ToDouble(ConfigurationManager.AppSettings["NServiceBus/Extensions/LongRunningMessages/WarningThressholdInSeconds"]);
-        var thresshold = TimeSpan.FromSeconds(thressholdValue == 0D ? thressholdDefault : thressholdValue);
+        const double thresholdDefault = 15D;
+        var thresholdValue = Convert.ToDouble(ConfigurationManager.AppSettings["NServiceBus/Extensions/LongRunningMessages/WarningThresholdInSeconds"]);
+        var threshold = TimeSpan.FromSeconds(thresholdValue == 0D ? thresholdDefault : thresholdValue);
 
-        LogManager.GetLogger(nameof(TrackProcessingDurationBehavior)).InfoFormat("WarningThressholdInSeconds: {0}", thresshold);
+        LogManager.GetLogger(nameof(TrackProcessingDurationBehavior)).InfoFormat("WarningThresholdInSeconds: {0}", threshold);
 
         var messages = new ConcurrentDictionary<string, DateTime>();
-        var instance = new TrackProcessingDurationBehavior(messages, thresshold);
+        var instance = new TrackProcessingDurationBehavior(messages, threshold);
 
         context.Container.RegisterSingleton(instance);
         context.Pipeline.Register(nameof(TrackProcessingDurationBehavior), typeof(TrackProcessingDurationBehavior), "Reports long running messages");
-        context.RegisterStartupTask(new ReportLongRunningMessagesTask(messages, thresshold, thresshold));
+        context.RegisterStartupTask(new ReportLongRunningMessagesTask(messages, threshold, threshold));
     }
 }

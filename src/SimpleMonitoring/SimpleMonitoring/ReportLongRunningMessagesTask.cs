@@ -8,18 +8,18 @@ using NServiceBus.Logging;
 
 class ReportLongRunningMessagesTask : FeatureStartupTask
 {
-    readonly TimeSpan Thresshold;
+    readonly TimeSpan Threshold;
     readonly TimeSpan Interval;
     readonly ILog Log = LogManager.GetLogger(nameof(ReportLongRunningMessagesTask));
 
     CancellationTokenSource cancellationTokenSource;
     CancellationToken cancellationToken;
-    Task looptask;
+    Task loopTask;
     readonly ConcurrentDictionary<string, DateTime> Messages;
 
-    public ReportLongRunningMessagesTask(ConcurrentDictionary<string, DateTime> messages, TimeSpan thresshold, TimeSpan interval)
+    public ReportLongRunningMessagesTask(ConcurrentDictionary<string, DateTime> messages, TimeSpan threshold, TimeSpan interval)
     {
-        Thresshold = thresshold;
+        Threshold = threshold;
         Interval = interval;
         Messages = messages;
     }
@@ -29,14 +29,14 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
         cancellationTokenSource = new CancellationTokenSource();
         cancellationToken = cancellationTokenSource.Token;
 
-        looptask = Task.Run(Loop);
+        loopTask = Task.Run(Loop);
         return Task.FromResult(0);
     }
 
     protected override Task OnStop(IMessageSession session)
     {
         cancellationTokenSource.Cancel();
-        return looptask;
+        return loopTask;
     }
 
     async Task Loop()
@@ -76,13 +76,13 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
     Task Invoke()
     {
         var now = DateTime.UtcNow;
-        var thresshold = now - Thresshold;
+        var threshold = now - Threshold;
         foreach (var i in Messages)
         {
-            if (i.Value < thresshold)
+            if (i.Value < threshold)
             {
                 var duration = now - i.Value;
-                Log.WarnFormat("Message '{0}' is running for {1} which is longer than {2}.", i.Key, duration, Thresshold);
+                Log.WarnFormat("Message '{0}' is running for {1} which is longer than {2}.", i.Key, duration, Threshold);
             }
         }
 
