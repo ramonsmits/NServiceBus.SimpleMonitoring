@@ -1,36 +1,37 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Threading.Tasks;
+using NServiceBus;
 using NServiceBus.Logging;
 using NServiceBus.Pipeline;
+using NServiceBus.Pipeline.Contexts;
 
-class TrackProcessingDurationBehavior : Behavior<ITransportReceiveContext>
+class TrackProcessingDurationBehavior : IBehavior<IncomingContext>
 {
     readonly ILog Log = LogManager.GetLogger(nameof(TrackProcessingDurationBehavior));
-    readonly ConcurrentDictionary<string, DateTime> Messages;
+    readonly ConcurrentDictionary<TransportMessage, DateTime> Messages;
     readonly TimeSpan Threshold;
 
-    public TrackProcessingDurationBehavior(ConcurrentDictionary<string, DateTime> messages, TimeSpan threshold)
+    public TrackProcessingDurationBehavior(ConcurrentDictionary<TransportMessage, DateTime> messages, TimeSpan threshold)
     {
         Messages = messages;
         Threshold = threshold;
     }
 
-    public override async Task Invoke(ITransportReceiveContext context, Func<Task> next)
+    public void Invoke(IncomingContext context, Action next)
     {
-        var id = context.Message.MessageId;
+        var instance = context.PhysicalMessage;
         var start = DateTime.UtcNow;
 
         try
         {
-            Messages.TryAdd(id, start);
-            await next().ConfigureAwait(false);
+            Messages.TryAdd(instance, start);
+            next();
         }
         finally
         {
-            Messages.TryRemove(id, out start);
+            Messages.TryRemove(instance, out start);
             var duration = DateTime.UtcNow - start;
-            Log.DebugFormat("Message {0} processing duration: {1}", id, duration);
+            Log.DebugFormat("Message {0} processing duration: {1}", instance.Id, duration);
             if (duration > Threshold) Log.WarnFormat("Processing duration {0} larger than allowed threshold {1}.", duration, Threshold);
         }
     }

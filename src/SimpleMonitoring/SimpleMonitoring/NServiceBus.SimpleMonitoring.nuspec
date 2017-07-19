@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>NServiceBus.SimpleMonitoring</id>
-    <title>Simple Monitoring extension for NServiceBus V6</title>
+    <title>Simple Monitoring extension for NServiceBus V5</title>
     <version>$version$</version>
     <authors>Ramon Smits</authors>
     <owners>ramonsmits</owners>

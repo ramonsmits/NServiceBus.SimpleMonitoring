@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Logging;
 
@@ -24,19 +23,17 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
         Messages = messages;
     }
 
-    protected override Task OnStart(IMessageSession session)
+    protected override void OnStart()
     {
         cancellationTokenSource = new CancellationTokenSource();
         cancellationToken = cancellationTokenSource.Token;
 
         loopTask = Task.Run(Loop);
-        return Task.FromResult(0);
     }
 
-    protected override Task OnStop(IMessageSession session)
+    protected override void OnStop()
     {
         cancellationTokenSource.Cancel();
-        return loopTask;
     }
 
     async Task Loop()
