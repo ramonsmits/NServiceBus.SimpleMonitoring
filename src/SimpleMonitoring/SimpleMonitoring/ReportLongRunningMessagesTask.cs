@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Logging;
+using NServiceBus.Transport;
 
 class ReportLongRunningMessagesTask : FeatureStartupTask
 {
@@ -15,9 +16,9 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
     CancellationTokenSource cancellationTokenSource;
     CancellationToken cancellationToken;
     Task loopTask;
-    readonly ConcurrentDictionary<string, DateTime> Messages;
+    readonly ConcurrentDictionary<IncomingMessage, DateTime> Messages;
 
-    public ReportLongRunningMessagesTask(ConcurrentDictionary<string, DateTime> messages, TimeSpan threshold, TimeSpan interval)
+    public ReportLongRunningMessagesTask(ConcurrentDictionary<IncomingMessage, DateTime> messages, TimeSpan threshold, TimeSpan interval)
     {
         Threshold = threshold;
         Interval = interval;

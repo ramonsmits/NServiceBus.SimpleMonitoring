@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Configuration;
 using NServiceBus.Features;
 using NServiceBus.Logging;
+using NServiceBus.Transport;
 
 public class SimpleMonitoringFeature : Feature
 {
@@ -19,7 +20,7 @@ public class SimpleMonitoringFeature : Feature
 
         LogManager.GetLogger(nameof(TrackProcessingDurationBehavior)).InfoFormat("WarningThresholdInSeconds: {0}", threshold);
 
-        var messages = new ConcurrentDictionary<string, DateTime>();
+        var messages = new ConcurrentDictionary<IncomingMessage, DateTime>();
         var instance = new TrackProcessingDurationBehavior(messages, threshold);
 
         context.Container.RegisterSingleton(instance);
