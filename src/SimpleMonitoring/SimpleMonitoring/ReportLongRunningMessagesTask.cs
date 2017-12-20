@@ -54,13 +54,13 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
 
                 if (duration > Interval)
                 {
-                    Log.WarnFormat("Took more time ({0}) than the interval ({1}). Not delaying", duration, Interval);
+                    Log.WarnFormat("Took more time ({0:g}) than the interval ({1:g}). Not delaying", duration, Interval);
                     continue;
                 }
 
                 var next = Next(start);
                 var delay = next - now;
-                Log.DebugFormat("Delaying {0}", delay);
+                Log.DebugFormat("Delaying {0:g}", delay);
                 await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
