@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Logging;
 
@@ -14,9 +15,9 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
     CancellationTokenSource cancellationTokenSource;
     CancellationToken cancellationToken;
     Task loopTask;
-    readonly ConcurrentDictionary<string, DateTime> Messages;
+    readonly ConcurrentDictionary<TransportMessage, DateTime> Messages;
 
-    public ReportLongRunningMessagesTask(ConcurrentDictionary<string, DateTime> messages, TimeSpan threshold, TimeSpan interval)
+    public ReportLongRunningMessagesTask(ConcurrentDictionary<TransportMessage, DateTime> messages, TimeSpan threshold, TimeSpan interval)
     {
         Threshold = threshold;
         Interval = interval;
@@ -34,6 +35,7 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
     protected override void OnStop()
     {
         cancellationTokenSource.Cancel();
+        loopTask.GetAwaiter().GetResult();
     }
 
     async Task Loop()
@@ -50,13 +52,13 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
 
                 if (duration > Interval)
                 {
-                    Log.WarnFormat("Took more time ({0}) than the interval ({1}). Not delaying", duration, Interval);
+                    Log.WarnFormat("Took more time ({0:g}) than the interval ({1:g}). Not delaying", duration, Interval);
                     continue;
                 }
 
                 var next = Next(start);
                 var delay = next - now;
-                Log.DebugFormat("Delaying {0}", delay);
+                Log.DebugFormat("Delaying {0:g}", delay);
                 await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
@@ -79,7 +81,7 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
             if (i.Value < threshold)
             {
                 var duration = now - i.Value;
-                Log.WarnFormat("Message '{0}' is running for {1} which is longer than {2}.", i.Key, duration, Threshold);
+                Log.WarnFormat("Message '{0}' is running for '{1:g}' which is longer than {2:g}.", i.Key.Id, duration, Threshold);
             }
         }
 
