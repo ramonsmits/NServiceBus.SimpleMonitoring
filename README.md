@@ -43,7 +43,7 @@ The threshold value can  only be specified as an AppSetting. Add a setting as sh
 
 ```xml
   <appSettings>
-    <add key="NServiceBus/Extensions/LongRunningMessages/WarningThresholdInSeconds" value="180"/>
+    <add key="NServiceBus/SimpleMonitoring/LongRunningMessages/WarningThresholdInSeconds" value="180"/>
   </appSettings>
 ```
 

@@ -19,7 +19,7 @@ public class SimpleMonitoringFeature : Feature
     protected override void Setup(FeatureConfigurationContext context)
     {
         const double thresholdDefault = 15D;
-        var thresholdValue = Convert.ToDouble(ConfigurationManager.AppSettings["NServiceBus/Extensions/LongRunningMessages/WarningThresholdInSeconds"], CultureInfo.InvariantCulture);
+        var thresholdValue = Convert.ToDouble(ConfigurationManager.AppSettings["NServiceBus/SimpleMonitoring/LongRunningMessages/WarningThresholdInSeconds"], CultureInfo.InvariantCulture);
         var threshold = TimeSpan.FromSeconds(thresholdValue == 0D ? thresholdDefault : thresholdValue);
         var interval = TimeSpan.FromTicks(threshold.Ticks / 2);
 
