@@ -1,6 +1,6 @@
 # NServiceBus.SimpleMonitoring
 
-Adds some additional diagnostics to NServiceBus 6 and 5.
+Adds some additional diagnostics to NServiceBus 7, 6 and 5.
 
 ## Version compatibility
 
@@ -8,6 +8,7 @@ Adds some additional diagnostics to NServiceBus 6 and 5.
 | ----------- | ---------------------------- |
 | v5.x        | v1.x                         |
 | v6.x        | v2.x                         |
+| v7.x        | v3.x                         |
 
 Please note that there might be versions targeting other NServiceBus versions. [Please check the Releases for all versions.](https://github.com/ramonsmits/nservicebus.simplemonitoring/releases) or [check the root of the  `master` branch of the repository](https://github.com/ramonsmits/nservicebus.simplemonitoring).
 
