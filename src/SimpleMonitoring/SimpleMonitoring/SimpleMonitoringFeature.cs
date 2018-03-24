@@ -9,6 +9,8 @@ using NServiceBus.Pipeline;
 
 public class SimpleMonitoringFeature : Feature
 {
+    static internal string LoggerName = "NServiceBus.SimpleMonitoring";
+
     public SimpleMonitoringFeature()
     {
         EnableByDefault();
@@ -21,7 +23,7 @@ public class SimpleMonitoringFeature : Feature
         var threshold = TimeSpan.FromSeconds(thresholdValue == 0D ? thresholdDefault : thresholdValue);
         var interval = TimeSpan.FromTicks(threshold.Ticks / 2);
 
-        LogManager.GetLogger(nameof(TrackProcessingDurationBehavior)).InfoFormat("WarningThresholdInSeconds: {0}", threshold);
+        LogManager.GetLogger(LoggerName).InfoFormat("WarningThresholdInSeconds: {0}", threshold);
 
         var messages = new ConcurrentDictionary<TransportMessage, DateTime>();
         var instance = new TrackProcessingDurationBehavior(messages, threshold);
