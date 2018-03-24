@@ -11,7 +11,7 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
 {
     readonly TimeSpan Threshold;
     readonly TimeSpan Interval;
-    readonly ILog Log = LogManager.GetLogger(nameof(ReportLongRunningMessagesTask));
+    readonly ILog Log = LogManager.GetLogger(SimpleMonitoringFeature.LoggerName);
 
     CancellationTokenSource cancellationTokenSource;
     CancellationToken cancellationToken;
@@ -83,7 +83,7 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
             if (i.Value < threshold)
             {
                 var duration = now - i.Value;
-                Log.WarnFormat("Message '{0}' is running for {1} which is longer than {2}.", i.Key, duration, Threshold);
+                Log.WarnFormat("Message '{0}' is already running for '{1:g}', which is larger than the threshold '{2:g}'.", i.Key.MessageId, duration, Threshold);
             }
         }
 
