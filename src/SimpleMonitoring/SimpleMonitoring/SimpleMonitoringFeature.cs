@@ -28,8 +28,10 @@ public class SimpleMonitoringFeature : Feature
         var messages = new ConcurrentDictionary<TransportMessage, DateTime>();
         var instance = new TrackProcessingDurationBehavior(messages, threshold);
 
-        context.Container.RegisterSingleton(instance);
-        context.Container.RegisterSingleton(new ReportLongRunningMessagesTask(messages, threshold, interval));
+        var container = context.Container;
+        container.RegisterSingleton(instance);
+        container.ConfigureComponent<ReportLongRunningMessagesTask>(f => new ReportLongRunningMessagesTask(messages, threshold, interval), DependencyLifecycle.SingleInstance);
+
         context.Pipeline.Register<Registration>();
 
         RegisterStartupTask<ReportLongRunningMessagesTask>();

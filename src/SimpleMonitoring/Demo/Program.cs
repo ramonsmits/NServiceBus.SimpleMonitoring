@@ -8,6 +8,7 @@ class Program
     {
         NServiceBus.Logging.LogManager.Use<NServiceBus.Logging.DefaultFactory>().Level(NServiceBus.Logging.LogLevel.Debug);
         var cfg = new BusConfiguration();
+        cfg.UseContainer<StructureMapBuilder>();
         cfg.EnableInstallers();
         cfg.UsePersistence<InMemoryPersistence>();
         cfg.Transactions().DisableDistributedTransactions();
