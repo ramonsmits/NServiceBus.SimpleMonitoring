@@ -21,7 +21,7 @@
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
     <RepositoryUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</RepositoryUrl>
-    <Copyright>Copyright 2017 (c) Ramon Smits</Copyright>
+    <Copyright>Copyright 2018 (c) Ramon Smits</Copyright>
     <PackageTags>nservicebus pipeline monitoring metrics alerting</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
