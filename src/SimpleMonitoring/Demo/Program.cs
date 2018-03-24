@@ -6,7 +6,7 @@ class Program
 {
     static void Main()
     {
-        NServiceBus.Logging.LogManager.Use<NServiceBus.Logging.DefaultFactory>().Level(NServiceBus.Logging.LogLevel.Warn);
+        NServiceBus.Logging.LogManager.Use<NServiceBus.Logging.DefaultFactory>().Level(NServiceBus.Logging.LogLevel.Debug);
         var cfg = new BusConfiguration();
         cfg.EnableInstallers();
         cfg.UsePersistence<InMemoryPersistence>();
