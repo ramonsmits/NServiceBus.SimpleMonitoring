@@ -7,13 +7,15 @@ class Program
 {
     static async Task Main()
     {
+#if NETCOREAPP2_0
+        Console.Title = "core";
+#endif
         NServiceBus.Logging.LogManager.Use<NServiceBus.Logging.DefaultFactory>().Level(NServiceBus.Logging.LogLevel.Debug);
         var cfg = new EndpointConfiguration("Demo.SimpleMonitoring");
         cfg.UseContainer<StructureMapBuilder>();
         cfg.EnableInstallers();
         cfg.UsePersistence<InMemoryPersistence>();
-        var t = cfg.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.SendsAtomicWithReceive);
-        cfg.SendFailedMessagesTo("error");
+        var t = cfg.UseTransport<LearningTransport>();
         cfg.PurgeOnStartup(true);
         Console.WriteLine(" F - Fast message, processing duration 0.1s");
         Console.WriteLine(" S - Slow message, processing duration 3s");

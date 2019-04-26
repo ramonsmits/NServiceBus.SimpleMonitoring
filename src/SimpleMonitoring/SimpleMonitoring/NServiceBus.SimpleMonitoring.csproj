@@ -2,42 +2,43 @@
 
   <PropertyGroup>
     <!-- AssemblyFileVersionAttribute -->
-    <FileVersion>2.0.0</FileVersion>
+    <FileVersion>3.0.0</FileVersion>
     <!-- AssemblyInformationalVersionAttribute -->
-    <Version>$(FileVersion)-rc1</Version>
+    <Version>$(FileVersion)</Version>
     <!-- AssemblyVersionAttribute -->
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
     <!-- Nuget -->
     <PackageVersion>$(Version)</PackageVersion>
-    <TargetFrameworks>net452</TargetFrameworks>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
     <PackageId>NServiceBus.SimpleMonitoring</PackageId>
     <Company>https://github.com/ramonsmits</Company>
     <Authors>ramonsmits</Authors>
-    <Description>Reports some alerts via WARN log entries when message processing duration takes too long.</Description>
+    <Description>Targets NServiceBus 7.0, reports some alerts via WARN log entries when message processing duration takes too long.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageProjectUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring/blob/$(PackageVersion)</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring/blob/$(PackageVersion)/LICENSE</PackageLicenseUrl>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
     <RepositoryUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</RepositoryUrl>
-    <Copyright>Copyright 2018 (c) Ramon Smits</Copyright>
-    <PackageTags>nservicebus pipeline monitoring metrics alerting</PackageTags>
+    <Copyright>Copyright 2019 (c) Ramon Smits</Copyright>
+    <PackageTags>nservicebus nservicebus7 pipeline monitoring metrics alerting</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
- 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="[6.0.0,7.0.0)" />
+    <PackageReference Include="NServiceBus" Version="[7.0.0-*,8.0.0)" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
     <Reference Include="System.Configuration" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.*" />
   </ItemGroup>
 
 </Project>
