@@ -13,7 +13,7 @@
     <PackageId>NServiceBus.SimpleMonitoring</PackageId>
     <Company>https://github.com/ramonsmits</Company>
     <Authors>ramonsmits</Authors>
-    <Description>NServiceBus 7.0 Reports some alerts via WARN log entries when message processing duration takes too long.</Description>
+    <Description>Targets NServiceBus 7.0, reports some alerts via WARN log entries when message processing duration takes too long.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring/blob/$(PackageVersion)</PackageProjectUrl>
@@ -21,7 +21,7 @@
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
     <RepositoryUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</RepositoryUrl>
-    <Copyright>Copyright 2018 (c) Ramon Smits</Copyright>
+    <Copyright>Copyright 2019 (c) Ramon Smits</Copyright>
     <PackageTags>nservicebus nservicebus7 pipeline monitoring metrics alerting</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
