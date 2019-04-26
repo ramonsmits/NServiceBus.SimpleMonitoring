@@ -4,7 +4,7 @@
     <!-- AssemblyFileVersionAttribute -->
     <FileVersion>3.0.0</FileVersion>
     <!-- AssemblyInformationalVersionAttribute -->
-    <Version>$(FileVersion)-rc1</Version>
+    <Version>$(FileVersion)</Version>
     <!-- AssemblyVersionAttribute -->
     <AssemblyVersion>3.0.0.0</AssemblyVersion>
     <!-- Nuget -->
