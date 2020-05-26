@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Configuration;
+using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Logging;
 using NServiceBus.Transport;
@@ -8,6 +9,7 @@ using NServiceBus.Transport;
 public class SimpleMonitoringFeature : Feature
 {
     static internal string LoggerName = "NServiceBus.SimpleMonitoring";
+    static readonly TimeSpan DefaultWarningThreshold = TimeSpan.FromSeconds(15);
 
     public SimpleMonitoringFeature()
     {
@@ -16,18 +18,36 @@ public class SimpleMonitoringFeature : Feature
 
     protected override void Setup(FeatureConfigurationContext context)
     {
-        const double thresholdDefault = 15D;
+        var logger = LogManager.GetLogger(LoggerName);
         var thresholdValue = Convert.ToDouble(ConfigurationManager.AppSettings["NServiceBus/SimpleMonitoring/LongRunningMessages/WarningThresholdInSeconds"]);
-        var threshold = TimeSpan.FromSeconds(thresholdValue == 0D ? thresholdDefault : thresholdValue);
 
-        LogManager.GetLogger(LoggerName).InfoFormat("WarningThresholdInSeconds: {0}", threshold);
+        TimeSpan threshold;
+
+        if (thresholdValue != 0D)
+        {
+            threshold = TimeSpan.FromSeconds(thresholdValue);
+            logger.Info("Warning threshold read from AppSettings.");
+        }
+        else if (context.Settings.TryGet<Properties>(out var properties))
+        {
+            threshold = properties.WarningThreshold;
+            logger.Info($"Warning threshold read via {nameof(SimpleMonitoringConfigurationExtension.ReportLongRunningMessages)} API.");
+        }
+        else
+        {
+            threshold = DefaultWarningThreshold;
+            logger.Info($"No warning threshold set, using default.");
+        }
+
+        logger.InfoFormat("Warning threshold: {0}", threshold);
 
         var messages = new ConcurrentDictionary<IncomingMessage, DateTime>();
 
         var container = context.Container;
 
-        container.ConfigureComponent<TrackProcessingDurationBehavior>(f => new TrackProcessingDurationBehavior(messages, threshold), NServiceBus.DependencyLifecycle.SingleInstance);
+        container.ConfigureComponent<TrackProcessingDurationBehavior>(f => new TrackProcessingDurationBehavior(messages, threshold), DependencyLifecycle.SingleInstance);
         context.Pipeline.Register(nameof(TrackProcessingDurationBehavior), typeof(TrackProcessingDurationBehavior), "Reports long running messages");
         context.RegisterStartupTask(new ReportLongRunningMessagesTask(messages, threshold, threshold));
     }
 }
+
