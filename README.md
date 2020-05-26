@@ -42,7 +42,17 @@ Install the Nuget package [NServiceBus.SimpleMonitoring](https://www.nuget.org/p
 
 *The default warning threshold is 15 seconds.*
 
-The threshold value can only be specified as an AppSetting. Add a setting as shown in the following sample:
+
+The threshold value can only be configured via code or via AppSetting.
+
+Note that is both are used the AppSetting takes precedence.
+
+Via code:
+```c#
+endpointConfiguration.ReportLongRunningMessages(TimeSpan.FromMinutes(3));
+```
+
+Via AppSetting:
 
 ```xml
   <appSettings>
