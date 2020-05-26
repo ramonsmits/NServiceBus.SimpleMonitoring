@@ -19,6 +19,7 @@
     <PackageProjectUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring/blob/$(PackageVersion)</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring/blob/$(PackageVersion)/LICENSE</PackageLicenseUrl>
     <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <IncludeSource>True</IncludeSource>
     <RepositoryUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</RepositoryUrl>
     <Copyright>Copyright 2019 (c) Ramon Smits</Copyright>
@@ -27,10 +28,12 @@
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <LangVersion>latest</LangVersion>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="[7.0.0-*,8.0.0)" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
