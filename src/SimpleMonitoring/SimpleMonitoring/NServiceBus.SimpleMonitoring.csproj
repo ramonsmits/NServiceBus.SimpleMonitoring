@@ -1,13 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- AssemblyFileVersionAttribute -->
-    <FileVersion>3.0.0</FileVersion>
-    <!-- AssemblyInformationalVersionAttribute -->
-    <Version>$(FileVersion)</Version>
-    <!-- AssemblyVersionAttribute -->
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <!-- Nuget -->
     <PackageVersion>$(Version)</PackageVersion>
     <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
     <PackageId>NServiceBus.SimpleMonitoring</PackageId>
@@ -16,13 +9,13 @@
     <Description>Targets NServiceBus 7.0, reports some alerts via WARN log entries when message processing duration takes too long.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageProjectUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring/blob/$(PackageVersion)</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring/blob/$(PackageVersion)/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <IncludeSource>True</IncludeSource>
     <RepositoryUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</RepositoryUrl>
-    <Copyright>Copyright 2019 (c) Ramon Smits</Copyright>
+    <Copyright>Copyright 2019, 2020, 2021, 2022 (c) Ramon Smits</Copyright>
     <PackageTags>nservicebus nservicebus7 pipeline monitoring metrics alerting</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
@@ -32,8 +25,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="[7.0.0-*,8.0.0)" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="GitVersion.MsBuild" Version="5.11.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NServiceBus" Version="[7.0.0,8.0.0)" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
