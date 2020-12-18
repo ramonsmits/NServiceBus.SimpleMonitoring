@@ -34,7 +34,13 @@ Note that the formatting of the log events is different per used logging framewo
 
 ## Installation
 
+### Via Nuget
+
 Install the Nuget package [NServiceBus.SimpleMonitoring](https://www.nuget.org/packages/NServiceBus.SimpleMonitoring)
+
+### Zero configuration and deployment
+
+Alternatively, download the nuget package, extract the DLL and drop-in the DLL in the endpoint installation path and restart the endpoint. Assembly scanning ensures this module will get auto loaded and enabled using default configuration values.
 
 ## Configuration
 
