@@ -2,15 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net452;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net472</TargetFrameworks>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="7.0.0" />
-    <PackageReference Include="NServiceBus.StructureMap" Version="7.0.0" />
-    <PackageReference Include="StructureMap" Version="4.7.1" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SimpleMonitoring\NServiceBus.SimpleMonitoring.csproj" />

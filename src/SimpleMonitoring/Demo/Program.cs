@@ -12,9 +12,7 @@ class Program
 #endif
         NServiceBus.Logging.LogManager.Use<NServiceBus.Logging.DefaultFactory>().Level(NServiceBus.Logging.LogLevel.Debug);
         var cfg = new EndpointConfiguration("Demo.SimpleMonitoring");
-        cfg.UseContainer<StructureMapBuilder>();
         cfg.EnableInstallers();
-        cfg.UsePersistence<InMemoryPersistence>();
         cfg.ReportLongRunningMessages(TimeSpan.FromSeconds(1));
         var t = cfg.UseTransport<LearningTransport>();
         cfg.PurgeOnStartup(true);
@@ -58,7 +56,7 @@ class TestHandler : IHandleMessages<TestMessage>
     public async Task Handle(TestMessage message, IMessageHandlerContext context)
     {
         Console.WriteLine($"Processing for {message.Duration}");
-        await Task.Delay(message.Duration).ConfigureAwait(false);
+        await Task.Delay(message.Duration, context.CancellationToken).ConfigureAwait(false);
         Console.WriteLine("Done!");
     }
 }

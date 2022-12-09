@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Logging;
@@ -43,9 +44,8 @@ public class SimpleMonitoringFeature : Feature
 
         var messages = new ConcurrentDictionary<IncomingMessage, DateTime>();
 
-        var container = context.Container;
-
-        container.ConfigureComponent<TrackProcessingDurationBehavior>(f => new TrackProcessingDurationBehavior(messages, threshold), DependencyLifecycle.SingleInstance);
+        var services = context.Services;
+        services.AddSingleton(f => new TrackProcessingDurationBehavior(messages, threshold));
         context.Pipeline.Register(nameof(TrackProcessingDurationBehavior), typeof(TrackProcessingDurationBehavior), "Reports long running messages");
         context.RegisterStartupTask(new ReportLongRunningMessagesTask(messages, threshold, threshold));
     }
