@@ -25,16 +25,16 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
         Messages = messages;
     }
 
-    protected override Task OnStart(IMessageSession session)
+    protected override Task OnStart(IMessageSession session, CancellationToken cancellationToken)
     {
         cancellationTokenSource = new CancellationTokenSource();
-        cancellationToken = cancellationTokenSource.Token;
+        this.cancellationToken = cancellationTokenSource.Token;
 
         loopTask = Task.Run(Loop);
         return Task.FromResult(0);
     }
 
-    protected override Task OnStop(IMessageSession session)
+    protected override Task OnStop(IMessageSession session, CancellationToken cancellationToken)
     {
         cancellationTokenSource.Cancel();
         return loopTask;
