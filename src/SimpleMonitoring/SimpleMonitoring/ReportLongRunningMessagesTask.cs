@@ -12,6 +12,7 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
     readonly TimeSpan Threshold;
     readonly TimeSpan Interval;
     readonly ILog Log = LogManager.GetLogger(SimpleMonitoringFeature.LoggerName);
+    readonly bool IsDebugEnabled;
 
     CancellationTokenSource cancellationTokenSource;
     CancellationToken cancellationToken;
@@ -23,6 +24,8 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
         Threshold = threshold;
         Interval = interval;
         Messages = messages;
+
+        IsDebugEnabled = Log.IsDebugEnabled;
     }
 
     protected override Task OnStart(IMessageSession session, CancellationToken cancellationToken)
@@ -60,7 +63,7 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
 
                 var next = Next(start);
                 var delay = next - now;
-                Log.DebugFormat("Delaying {0:g}", delay);
+                if (IsDebugEnabled) Log.DebugFormat("Delaying {0:g}", delay);
                 await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
