@@ -1,28 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageVersion>$(Version)</PackageVersion>
     <TargetFrameworks>net6.0;net472</TargetFrameworks>
-    <PackageId>NServiceBus.SimpleMonitoring</PackageId>
-    <Company>https://github.com/ramonsmits</Company>
-    <Authors>ramonsmits</Authors>
-    <Description>Targets NServiceBus 8.0, reports some alerts via WARN log entries when message processing duration takes too long.</Description>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageProjectUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <IncludeSymbols>True</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <IncludeSource>True</IncludeSource>
-    <RepositoryUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</RepositoryUrl>
-    <Copyright>Copyright 2019, 2020, 2021, 2022 (c) Ramon Smits</Copyright>
-    <PackageTags>nservicebus nservicebus7 pipeline monitoring metrics alerting</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <LangVersion>latest</LangVersion>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>ramonsmits</Authors>
+    <Company>https://github.com/ramonsmits</Company>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <Copyright>Copyright 2019, 2020, 2021, 2022 (c) Ramon Smits</Copyright>
+    <Description>Targets NServiceBus 8.0, reports some alerts via WARN log entries when message processing duration takes too long.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSource>True</IncludeSource>
+    <IncludeSymbols>True</IncludeSymbols>
+    <PackageId>NServiceBus.SimpleMonitoring</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</PackageProjectUrl>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>nservicebus nservicebus7 pipeline monitoring metrics alerting</PackageTags>
+    <PackageVersion>$(Version)</PackageVersion>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</RepositoryUrl>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
