@@ -13,7 +13,7 @@
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <Copyright>Copyright 2019, 2020, 2021, 2022, 2023, 2024 (c) Ramon Smits</Copyright>
     <Description>Targets NServiceBus 8.0, reports some alerts via WARN log entries when message processing duration takes too long.</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
     <IncludeSource>True</IncludeSource>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageId>NServiceBus.SimpleMonitoring</PackageId>
