@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net10.0</TargetFrameworks>
@@ -10,17 +10,14 @@
   <PropertyGroup>
     <Authors>ramonsmits</Authors>
     <Company>https://github.com/ramonsmits</Company>
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
     <Copyright>Copyright 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 (c) Ramon Smits</Copyright>
     <Description>Targets NServiceBus 10.x, reports some alerts via WARN log entries when message processing duration takes too long.</Description>
     <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
-    <IncludeSource>True</IncludeSource>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageId>NServiceBus.SimpleMonitoring</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/ramonsmits/NServiceBus.SimpleMonitoring</PackageProjectUrl>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>nservicebus nservicebus10 pipeline monitoring metrics alerting</PackageTags>
     <PackageVersion>$(Version)</PackageVersion>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -40,11 +37,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NServiceBus" Version="[10.0.0,11.0.0)" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.3" />
   </ItemGroup>
 
 </Project>
