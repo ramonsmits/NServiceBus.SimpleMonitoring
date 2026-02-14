@@ -13,11 +13,6 @@ public class SimpleMonitoringFeature : Feature
     static internal string LoggerName = "NServiceBus.SimpleMonitoring";
     static readonly TimeSpan DefaultWarningThreshold = TimeSpan.FromSeconds(15);
 
-    public SimpleMonitoringFeature()
-    {
-        EnableByDefault();
-    }
-
     protected override void Setup(FeatureConfigurationContext context)
     {
         var logger = LogManager.GetLogger(LoggerName);

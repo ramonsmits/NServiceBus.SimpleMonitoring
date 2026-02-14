@@ -7,7 +7,7 @@ var cfg = new EndpointConfiguration("Demo.SimpleMonitoring");
 cfg.UseSerialization(new SystemJsonSerializer());
 cfg.EnableInstallers();
 cfg.ReportLongRunningMessages(TimeSpan.FromSeconds(1));
-var t = cfg.UseTransport<LearningTransport>();
+cfg.UseTransport(new LearningTransport());
 cfg.PurgeOnStartup(true);
 Console.WriteLine(" F - Fast message, processing duration 0.1s");
 Console.WriteLine(" S - Slow message, processing duration 3s");
