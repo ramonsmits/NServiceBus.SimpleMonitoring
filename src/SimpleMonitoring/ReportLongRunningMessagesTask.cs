@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,64 +7,50 @@ using NServiceBus.Features;
 using NServiceBus.Logging;
 using NServiceBus.Transport;
 
-class ReportLongRunningMessagesTask : FeatureStartupTask
+class ReportLongRunningMessagesTask(ConcurrentDictionary<IncomingMessage, DateTime> messages, TimeSpan threshold, TimeSpan interval) : FeatureStartupTask
 {
-    readonly TimeSpan Threshold;
-    readonly TimeSpan Interval;
     readonly ILog Log = LogManager.GetLogger(SimpleMonitoringFeature.LoggerName);
-    readonly bool IsDebugEnabled;
+    readonly bool IsDebugEnabled = LogManager.GetLogger(SimpleMonitoringFeature.LoggerName).IsDebugEnabled;
 
     CancellationTokenSource cancellationTokenSource;
-    CancellationToken cancellationToken;
     Task loopTask;
-    readonly ConcurrentDictionary<IncomingMessage, DateTime> Messages;
-
-    public ReportLongRunningMessagesTask(ConcurrentDictionary<IncomingMessage, DateTime> messages, TimeSpan threshold, TimeSpan interval)
-    {
-        Threshold = threshold;
-        Interval = interval;
-        Messages = messages;
-
-        IsDebugEnabled = Log.IsDebugEnabled;
-    }
 
     protected override Task OnStart(IMessageSession session, CancellationToken cancellationToken)
     {
         cancellationTokenSource = new CancellationTokenSource();
-        this.cancellationToken = cancellationTokenSource.Token;
-
         loopTask = Task.Run(Loop);
-        return Task.FromResult(0);
+        return Task.CompletedTask;
     }
 
     protected override Task OnStop(IMessageSession session, CancellationToken cancellationToken)
     {
-        cancellationTokenSource.Cancel();
-        return loopTask;
+        cancellationTokenSource?.Cancel();
+        return loopTask ?? Task.CompletedTask;
     }
 
     async Task Loop()
     {
-        while (!cancellationToken.IsCancellationRequested)
+        var token = cancellationTokenSource!.Token;
+        while (!token.IsCancellationRequested)
         {
             try
             {
                 var start = DateTime.UtcNow;
-                await Invoke().ConfigureAwait(false);
+                Invoke();
 
                 var now = DateTime.UtcNow;
                 var duration = now - start;
 
-                if (duration > Interval)
+                if (duration > interval)
                 {
-                    Log.WarnFormat("Took more time ({0:g}) than the interval ({1:g}). Not delaying", duration, Interval);
+                    Log.WarnFormat("Took more time ({0:g}) than the interval ({1:g}). Not delaying", duration, interval);
                     continue;
                 }
 
                 var next = Next(start);
                 var delay = next - now;
                 if (IsDebugEnabled) Log.DebugFormat("Delaying {0:g}", delay);
-                await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
+                await Task.Delay(delay, token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -77,20 +63,18 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
         }
     }
 
-    Task Invoke()
+    void Invoke()
     {
         var now = DateTime.UtcNow;
-        var threshold = now - Threshold;
-        foreach (var i in Messages)
+        var cutoff = now - threshold;
+        foreach (var i in messages)
         {
-            if (i.Value < threshold)
+            if (i.Value < cutoff)
             {
                 var duration = now - i.Value;
-                Log.WarnFormat("Message '{0}' is already running for '{1:g}', which is larger than the threshold '{2:g}'.", i.Key.MessageId, duration, Threshold);
+                Log.WarnFormat("Message '{0}' is already running for '{1:g}', which is larger than the threshold '{2:g}'.", i.Key.MessageId, duration, threshold);
             }
         }
-
-        return Task.FromResult(0);
     }
 
     DateTime Next(DateTime last)
@@ -99,7 +83,7 @@ class ReportLongRunningMessagesTask : FeatureStartupTask
         var next = last;
         do
         {
-            next += Interval;
+            next += interval;
         } while (next < now);
         return next;
     }

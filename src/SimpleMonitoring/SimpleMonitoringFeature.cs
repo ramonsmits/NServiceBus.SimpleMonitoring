@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Logging;
-using NServiceBus.Pipeline;
 using NServiceBus.Transport;
 
 public class SimpleMonitoringFeature : Feature
 {
-    static internal string LoggerName = "NServiceBus.SimpleMonitoring";
+    internal static string LoggerName = "NServiceBus.SimpleMonitoring";
     static readonly TimeSpan DefaultWarningThreshold = TimeSpan.FromSeconds(15);
 
     protected override void Setup(FeatureConfigurationContext context)
@@ -33,17 +32,15 @@ public class SimpleMonitoringFeature : Feature
         else
         {
             threshold = DefaultWarningThreshold;
-            logger.Info($"No warning threshold set, using default.");
+            logger.Info("No warning threshold set, using default.");
         }
 
         logger.InfoFormat("Warning threshold: {0}", threshold);
 
         var messages = new ConcurrentDictionary<IncomingMessage, DateTime>();
 
-        var services = context.Services;
-        services.AddSingleton(f => new TrackProcessingDurationBehavior(messages, threshold));
+        context.Services.AddSingleton(_ => new TrackProcessingDurationBehavior(messages, threshold));
         context.Pipeline.Register(nameof(TrackProcessingDurationBehavior), serviceProvider => serviceProvider.GetRequiredService<TrackProcessingDurationBehavior>(), "Reports long running messages");
         context.RegisterStartupTask(new ReportLongRunningMessagesTask(messages, threshold, threshold));
     }
 }
-
