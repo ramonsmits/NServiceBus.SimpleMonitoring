@@ -50,7 +50,7 @@ release version="":
     git diff --quiet && git diff --cached --quiet || { echo "Working tree is dirty, commit or stash first"; exit 1; }
     date=$(date +%Y-%m-%d)
     sed -i "s/## \[Unreleased\]/## [$changelog_version] - $date/" CHANGELOG.md
-    sed -i "s|\[Unreleased\]: \(.*\)/compare/\(.*\)\.\.\.HEAD|[$changelog_version]: \1/compare/\2...$version|" CHANGELOG.md
+    sed -i "s|\[Unreleased\]: \(.*\)/compare/\(.*\)\.\.\.HEAD|[$changelog_version]: \1/compare/\2...$changelog_version|" CHANGELOG.md
     git add CHANGELOG.md
     git commit -m "Release $version"
     git tag "$version"
