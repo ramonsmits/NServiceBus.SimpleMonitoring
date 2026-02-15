@@ -45,6 +45,14 @@ Install the Nuget package [NServiceBus.SimpleMonitoring](https://www.nuget.org/p
 
 Alternatively, download the nuget package, extract the DLL and drop-in the DLL in the endpoint installation path and restart the endpoint. Assembly scanning ensures this module will get auto loaded and enabled using default configuration values.
 
+## Migrating to NServiceBus 11
+
+In NServiceBus 10.x, this feature is still auto-enabled via assembly scanning. NServiceBus 11 will remove assembly scanning of features, so `EnableByDefault()` will stop working. To ensure a smooth upgrade, explicitly call `ReportLongRunningMessages()` on your `EndpointConfiguration`:
+
+```c#
+endpointConfiguration.ReportLongRunningMessages(TimeSpan.FromMinutes(3));
+```
+
 ## Configuration
 
 ### Set the Warning threshold

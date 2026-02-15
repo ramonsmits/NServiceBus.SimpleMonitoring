@@ -4,13 +4,16 @@
 
 Target: NServiceBus 10.x | .NET 10.0
 
-Major version targeting NServiceBus 10.x on .NET 10.0. AppSettings-based configuration has been replaced with `IConfiguration` support. The code configuration API (`ReportLongRunningMessages`) remains unchanged.
+Major version targeting NServiceBus 10.x on .NET 10.0. AppSettings-based configuration has been replaced with `IConfiguration` support. The feature remains auto-enabled via assembly scanning for backward compatibility, but you should explicitly call `ReportLongRunningMessages()` to prepare for NServiceBus 11.
 
 ### Breaking changes
 
 - Drop `AppSettings`-based configuration (`NServiceBus/SimpleMonitoring/LongRunningMessages/WarningThresholdInSeconds`) — use the code API or `IConfiguration` instead (a5525e2)
 - Remove `System.Configuration.ConfigurationManager` dependency (a5525e2)
-- Feature no longer auto-enables via `EnableByDefault()` — must be explicitly enabled via the `ReportLongRunningMessages` configuration API (b0dec34)
+
+### Migration
+
+- Explicitly call `ReportLongRunningMessages()` on `EndpointConfiguration` — NServiceBus 11 will remove assembly scanning of features and `EnableByDefault()` will stop working
 
 ### Improvements
 

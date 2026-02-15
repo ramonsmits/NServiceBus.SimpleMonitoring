@@ -15,6 +15,13 @@ public sealed class SimpleMonitoringFeature : Feature
     const string WarningThresholdKey = "WarningThresholdInSeconds";
     static readonly TimeSpan DefaultWarningThreshold = TimeSpan.FromSeconds(15);
 
+    public SimpleMonitoringFeature()
+    {
+#pragma warning disable CS0618 // EnableByDefault will be removed in NServiceBus 12; use EnableFeature<SimpleMonitoringFeature>() via ReportLongRunningMessages() for v11+ readiness
+        EnableByDefault();
+#pragma warning restore CS0618
+    }
+
     protected override void Setup(FeatureConfigurationContext context)
     {
         var messages = new ConcurrentDictionary<IncomingMessage, DateTime>();
