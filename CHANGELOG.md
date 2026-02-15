@@ -4,20 +4,37 @@
 
 Target: NServiceBus 10.x | .NET 10.0
 
-- Support NServiceBus 10.x
-- Target net10.0
-- Remove `EnableByDefault()`, require explicit `EnableFeature` via configuration API
-- Code cleanup: primary constructor, modern argument validation, remove dead AssemblyInfo
-- Remove redundant `Microsoft.SourceLink.GitHub` (built into .NET 8+ SDK)
-- Switch from GitVersion to MinVer for tag-based versioning
-- Remove legacy `packages.config`
-- Add justfile for build, pack, and publish workflows
-- Add GitHub Actions CI workflow
+Major version targeting NServiceBus 10.x on .NET 10.0. AppSettings-based configuration has been replaced with `IConfiguration` support. The code configuration API (`ReportLongRunningMessages`) remains unchanged.
+
+### Breaking changes
+
+- Drop `AppSettings`-based configuration (`NServiceBus/SimpleMonitoring/LongRunningMessages/WarningThresholdInSeconds`) — use the code API or `IConfiguration` instead (a5525e2)
+- Remove `System.Configuration.ConfigurationManager` dependency (a5525e2)
+- Feature no longer auto-enables via `EnableByDefault()` — must be explicitly enabled via the `ReportLongRunningMessages` configuration API (b0dec34)
+
+### Improvements
+
+- Support NServiceBus 10.x (a5525e2)
+- Add `IConfiguration` support (`NServiceBus:SimpleMonitoring:WarningThresholdInSeconds`) as a fallback when the code API is not used (requires `NServiceBus.Extensions.Hosting`)
+- Faster detection of long-running messages — background monitoring interval now checks at half the warning threshold
+- Fix resource leak: `CancellationTokenSource` is now properly disposed on stop
+
+### Internal
+
+- Target net10.0 (a5525e2)
+- Code cleanup: primary constructors, modern argument validation, remove dead AssemblyInfo (b0dec34)
+- Remove redundant `Microsoft.SourceLink.GitHub` (built into .NET 8+ SDK) (53cc0b3)
+- Switch from GitVersion to MinVer for tag-based versioning (c56247f)
+- Remove legacy `packages.config` (a5525e2)
+- Remove orphaned `.nuspec` file
+- Add justfile for build, pack, and publish workflows (5656c69)
+- Add GitHub Actions CI workflow (3d7a6bf)
+- Enable nullable reference types
+- Seal all classes
 
 ### Dependencies
 
 - NServiceBus [10.0.0, 11.0.0)
-- System.Configuration.ConfigurationManager 10.0.3
 - MinVer 7.0.0
 
 ## [5.0.0] - 2024-06-14

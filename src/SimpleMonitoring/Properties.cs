@@ -1,6 +1,6 @@
 using System;
 
-class Properties
+sealed class Properties
 {
-    public TimeSpan WarningThreshold;
+    public TimeSpan WarningThreshold { get; set; }
 }

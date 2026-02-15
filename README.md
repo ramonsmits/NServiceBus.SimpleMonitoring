@@ -52,24 +52,27 @@ Alternatively, download the nuget package, extract the DLL and drop-in the DLL i
 *The default warning threshold is 15 seconds.*
 
 
-The threshold value can only be configured via code or via AppSetting.
-
-Note that is both are used the AppSetting takes precedence.
+The threshold value can be configured via code or via `IConfiguration`. The code API takes precedence.
 
 Via code:
 ```c#
 endpointConfiguration.ReportLongRunningMessages(TimeSpan.FromMinutes(3));
 ```
 
-Via AppSetting:
+Via `IConfiguration` (e.g. `appsettings.json`):
 
-```xml
-  <appSettings>
-    <add key="NServiceBus/SimpleMonitoring/LongRunningMessages/WarningThresholdInSeconds" value="180"/>
-  </appSettings>
+```json
+{
+  "NServiceBus": {
+    "SimpleMonitoring": {
+      "WarningThresholdInSeconds": 180
+    }
+  }
+}
 ```
 
-Note that the above snippet will report messages with log level Warning if their processing duration is over 180 seconds (3 minutes).
+> [!NOTE]
+> `IConfiguration` support requires hosting via [`NServiceBus.Extensions.Hosting`](https://docs.particular.net/nservicebus/hosting/extensions-hosting), which registers `IConfiguration` in the dependency injection container. The threshold is read automatically as a fallback when the code API is not used.
 
 ### Show durations for all messages
 

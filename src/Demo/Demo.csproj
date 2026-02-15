@@ -10,4 +10,12 @@
     <ProjectReference Include="..\SimpleMonitoring\NServiceBus.SimpleMonitoring.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="[4.0.0,5.0.0)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

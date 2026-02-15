@@ -7,13 +7,13 @@ using NServiceBus.Features;
 using NServiceBus.Logging;
 using NServiceBus.Transport;
 
-class ReportLongRunningMessagesTask(ConcurrentDictionary<IncomingMessage, DateTime> messages, TimeSpan threshold, TimeSpan interval) : FeatureStartupTask
+sealed class ReportLongRunningMessagesTask(ConcurrentDictionary<IncomingMessage, DateTime> messages, TimeSpan threshold, TimeSpan interval) : FeatureStartupTask
 {
-    readonly ILog Log = LogManager.GetLogger(SimpleMonitoringFeature.LoggerName);
-    readonly bool IsDebugEnabled = LogManager.GetLogger(SimpleMonitoringFeature.LoggerName).IsDebugEnabled;
+    static readonly ILog Log = LogManager.GetLogger(SimpleMonitoringFeature.LoggerName);
+    static readonly bool IsDebugEnabled = Log.IsDebugEnabled;
 
-    CancellationTokenSource cancellationTokenSource;
-    Task loopTask;
+    CancellationTokenSource? cancellationTokenSource;
+    Task? loopTask;
 
     protected override Task OnStart(IMessageSession session, CancellationToken cancellationToken)
     {
@@ -22,10 +22,11 @@ class ReportLongRunningMessagesTask(ConcurrentDictionary<IncomingMessage, DateTi
         return Task.CompletedTask;
     }
 
-    protected override Task OnStop(IMessageSession session, CancellationToken cancellationToken)
+    protected override async Task OnStop(IMessageSession session, CancellationToken cancellationToken)
     {
         cancellationTokenSource?.Cancel();
-        return loopTask ?? Task.CompletedTask;
+        if (loopTask != null) await loopTask.ConfigureAwait(false);
+        cancellationTokenSource?.Dispose();
     }
 
     async Task Loop()

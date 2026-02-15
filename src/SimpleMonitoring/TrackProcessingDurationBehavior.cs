@@ -5,7 +5,7 @@ using NServiceBus.Logging;
 using NServiceBus.Pipeline;
 using NServiceBus.Transport;
 
-class TrackProcessingDurationBehavior : Behavior<ITransportReceiveContext>
+sealed class TrackProcessingDurationBehavior : Behavior<ITransportReceiveContext>
 {
     readonly ILog Log = LogManager.GetLogger(SimpleMonitoringFeature.LoggerName);
     readonly bool IsDebugEnabled;
